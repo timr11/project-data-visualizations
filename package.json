@@ -1,0 +1,26 @@
+{
+	"name": "project-data-visualizations",
+	"version": "1.0.0",
+	"description": "Visualizations for Helpful Engineering's Project Data",
+	"main": "src/app.ts",
+	"repository": "git@github.com:timr11/project-data-visualizations",
+	"author": "Tim Romanski",
+	"license": "MIT",
+	"dependencies": {
+		"@types/cytoscape": "^3.19.10",
+		"@types/node": "^20.4.1",
+		"cytoscape": "^3.25.0",
+		"typescript": "^5.1.6",
+		"webpack-cli": "^5.1.4"
+	},
+	"devDependencies": {
+		"ts-loader": "^9.4.4",
+		"ts-node": "^10.9.1",
+		"webpack": "^5.88.1"
+	},
+	"scripts": {
+		"build": "npx webpack --config webpack.config.js",
+		"start": "python3 -m http.server",
+		"dev": "bun ./src/app.ts"
+	}
+}
