@@ -5,22 +5,38 @@ document.addEventListener("DOMContentLoaded", function () {
 		container: document.getElementById("cy"),
 		elements: [
 			{
-				data: { id: "a" },
+				data: { id: "Devhawk Engineering" },
+				classes: "maker",
 			},
 			{
-				data: { id: "b" },
+				data: { id: "Robert's Chair Parts" },
+				classes: "supplier",
 			},
 			{
-				data: { id: "ab", source: "a", target: "b" },
+				data: {
+					id: "e1",
+					source: "Devhawk Engineering",
+					target: "Robert's Chair Parts",
+				},
 			},
 		],
-
 		style: [
 			{
-				selector: "node",
+				selector: ".maker",
 				style: {
-					"background-color": "#666",
-					label: "data(id)",
+					"background-image": "url(../public/assets/Maker.png)",
+					shape: "rectangle",
+					"background-fit": "contain",
+					"background-opacity": 0,
+				},
+			},
+			{
+				selector: ".supplier",
+				style: {
+					"background-image": "url(../public/assets/Supplier.png)",
+					shape: "rectangle",
+					"background-fit": "contain",
+					"background-opacity": 0,
 				},
 			},
 			{
@@ -34,10 +50,10 @@ document.addEventListener("DOMContentLoaded", function () {
 				},
 			},
 		],
-
 		layout: {
 			name: "grid",
-			rows: 1,
+			rows: 2,
+			cols: 1,
 		},
 	});
 });
