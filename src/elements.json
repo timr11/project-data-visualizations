@@ -1,0 +1,35 @@
+{
+	"nodes": [
+		{
+			"data": {
+				"id": "a",
+				"name": "Devhawk Engineering",
+				"product": {
+					"identifier": "Q15026",
+					"description": "chair"
+				}
+			},
+			"classes": "maker"
+		},
+		{
+			"data": {
+				"id": "b",
+				"name": "Robert's Chair Parts",
+				"product": {
+					"identifier": "Q15026",
+					"description": "chair"
+				}
+			},
+			"classes": "supplier"
+		}
+	],
+	"edges": [
+		{
+			"data": {
+				"id": "e1",
+				"source": "a",
+				"target": "b"
+			}
+		}
+	]
+}

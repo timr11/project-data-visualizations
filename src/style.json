@@ -1,0 +1,26 @@
+[
+	{
+		"selector": ".maker",
+		"style": {
+			"shape": "rectangle",
+			"backgroundColor": "red"
+		}
+	},
+	{
+		"selector": ".supplier",
+		"style": {
+			"shape": "rectangle",
+			"backgroundColor": "blue"
+		}
+	},
+	{
+		"selector": "edge",
+		"style": {
+			"width": 3,
+			"line-color": "#ccc",
+			"target-arrow-color": "#ccc",
+			"target-arrow-shape": "triangle",
+			"curve-style": "bezier"
+		}
+	}
+]

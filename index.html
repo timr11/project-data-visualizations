@@ -1,4 +1,4 @@
-<!DOCTYPE >
+<!DOCTYPE html>
 
 <html>
 	<head>
@@ -8,30 +8,12 @@
 			name="viewport"
 			content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1"
 		/>
-		<style>
-			body {
-				font-family: helvetica neue, helvetica, liberation sans, arial,
-					sans-serif;
-				font-size: 14px;
-			}
-
-			#cy {
-				position: absolute;
-				left: 0;
-				top: 0;
-				bottom: 0;
-				right: 0;
-				z-index: 999;
-			}
-		</style>
+		<link rel="stylesheet" href="./src/style.css" />
 
 		<script>
 			var exports = {};
 		</script>
-		<!-- <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script> -->
-		<!-- for testing with local version of cytoscape.js -->
-		<script src="./node_modules/cytoscape/dist/cytoscape.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.js"></script>
+		<link href="https://unpkg.com/tippy.js@6/dist/tippy.css" rel="stylesheet" />
 
 		<div id="cy"></div>
 		<script type="module" src="./bin/project-data-visualizations.js"></script>
