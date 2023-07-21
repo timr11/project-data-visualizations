@@ -8,7 +8,7 @@ const PROD = NODE_ENV === "production";
 
 module.exports = {
 	mode: "production", // Set the mode to 'production' for minification
-	entry: "./src/app.ts", // Entry point of your application
+	entry: "./src/ts/index.ts", // Entry point of your application
 	output: {
 		filename: `${pkg.name}.js`, // Output file name
 		path: path.resolve(__dirname, "bin"), // Output directory path
