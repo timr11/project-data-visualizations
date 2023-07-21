@@ -3,7 +3,9 @@
 		"selector": ".maker",
 		"style": {
 			"shape": "rectangle",
-			"backgroundColor": "red"
+			"background-image": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Factory_icon.svg",
+			"background-fit": "cover cover",
+			"background-opacity": 0
 		}
 	},
 	{

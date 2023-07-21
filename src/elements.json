@@ -4,9 +4,9 @@
 			"data": {
 				"id": "a",
 				"name": "Devhawk Engineering",
-				"product": {
-					"identifier": "Q15026",
-					"description": "chair"
+				"tooltip": {
+					"Identifier": "Q15026",
+					"Description": "chair"
 				}
 			},
 			"classes": "maker"
@@ -15,9 +15,9 @@
 			"data": {
 				"id": "b",
 				"name": "Robert's Chair Parts",
-				"product": {
-					"identifier": "Q15026",
-					"description": "chair"
+				"tooltip": {
+					"Identifier": "Q15026",
+					"Description": "chair"
 				}
 			},
 			"classes": "supplier"
