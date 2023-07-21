@@ -1,21 +1,43 @@
 # Project Data Visualizations
 
-This project contains prototypes of visualizations for [Project Data](https://github.com/helpfulengineering/project-data-platform/tree/main).
+This project aims to solve [Issue #13](https://github.com/helpfulengineering/project-data-platform/issues/13) of [Project Data](https://github.com/helpfulengineering/project-data-platform/tree/main), a CLI for supply-chain modeling. The goal is to visualize fulfillment plans, which defines the how and what in creating a thing. There are prototypes of these fulfillment plans written in python, it's now useful to visualize them with something more user-friendly than ascii art, as it's currently intended to be demo-able.
 
-First install JS deps:
+## Building the code
+
+First build the JS that renders the graph using [cytoscape.js](https://js.cytoscape.org/):
 
 ```bash
 yarn
+
+# Set MIN=1 if you want a minified JS output
+MIN=1 yarn build
 ```
 
-To build:
+This will compile the TS code to `./bin/project-data-visualizations.js`. This is then imported by the ipynb, and you're then free to go wild with python for computing the graphs, and rendering them with the full capability of cytoscape.js.
+
+The python code interacts with javascript code using the [notebookjs](https://github.com/jorgehpo/notebookJS) python package. The `execute_js` function interfaces with the JS code. It allows for passing data from python to JS, and it sends JS code the div ID of the HTML element inside the Jupyter notebook where the graph will render.
+
+The python code sends JS code a dictionary containing three essential ingredients to make a cytoscape graph. These are: [Elements](https://js.cytoscape.org/#notation/elements-json), [Layouts](https://js.cytoscape.org/#layouts) and [Style](https://js.cytoscape.org/#style). You can either modify the static JSON files directly that define these things, or create them purely in python.
+
+## VS Code `.ipynb` Setup
+
+Install the [Jupyter VS Code extensions](https://code.visualstudio.com/docs/datascience/jupyter-notebooks). Also you'll need [poetry](https://python-poetry.org/docs/).
+
+To install poetry deps to run the ipynb, run:
 
 ```bash
-yarn build
+poetry shell
+poetry install
 ```
 
-You can then host the HTML (index.html) using whatever webserver you want, if you have python3 installed you can run:
+You're now set to run the project-data-visualizations.ipynb right in VS Code.
 
-```bash
-yarn start
-```
+## Google Colab Setup
+
+Before starting, make sure you've first built the JS code. To run the `.ipynb` file in Google Colab, import the `src/py/project-data-visualizations.ipynb` file to Colab then copy over all of these files to the project:
+
+- `./bin/project-data-visualizations.js`
+- `./src/py/elements.json`
+- `./src/py/layout.json`
+- `./src/py/style.css`
+- `./src/py/style.json`
