@@ -2,7 +2,17 @@
 	"nodes": [
 		{
 			"data": {
-				"id": "a",
+				"id": "1",
+				"name": "Helpful Engineering",
+				"tooltip": {
+					"Name": "Helpful Engineering"
+				}
+			},
+			"classes": "maker"
+		},
+		{
+			"data": {
+				"id": "2",
 				"name": "Devhawk Engineering",
 				"tooltip": {
 					"Identifier": "Q15026",
@@ -13,9 +23,20 @@
 		},
 		{
 			"data": {
-				"id": "b",
+				"id": "3",
 				"name": "Robert's Chair Parts",
 				"tooltip": {
+					"Identifier": "Q15026",
+					"Description": "chair"
+				}
+			},
+			"classes": "supplier"
+		},
+		{
+			"data": {
+				"id": "4",
+				"tooltip": {
+					"Name": "Tim's Chair Parts",
 					"Identifier": "Q15026",
 					"Description": "chair"
 				}
@@ -27,8 +48,22 @@
 		{
 			"data": {
 				"id": "e1",
-				"source": "a",
-				"target": "b"
+				"source": "1",
+				"target": "2"
+			}
+		},
+		{
+			"data": {
+				"id": "e2",
+				"source": "2",
+				"target": "3"
+			}
+		},
+		{
+			"data": {
+				"id": "e3",
+				"source": "2",
+				"target": "4"
 			}
 		}
 	]

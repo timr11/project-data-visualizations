@@ -1,7 +1,7 @@
 import cytoscape from "cytoscape";
 
 const toggleVisibility = (n: cytoscape.NodeSingular) => {
-	console.log(`Toggling ${n.id}`);
+	console.log(`Toggling the visibility of node ${n.id()}`);
 	if (n.hidden()) {
 		n.css({ visibility: "visible" });
 		n.connectedEdges().forEach((edge) => {
@@ -29,8 +29,7 @@ export const toggleDescendantsVisibilityOnClick = (
 		const nodes = cy.$(`.${className}`);
 		nodes.forEach((node) => {
 			node.on("click", () => {
-				const children = node.neighborhood().filter("node");
-				console.log(`# of children: ${(children && children.length) || 0}`);
+				const children = node.successors("node");
 				children.forEach(toggleVisibility);
 			});
 		});
