@@ -1,5 +1,6 @@
 import cytoscape from "cytoscape";
 import { registerTooltips } from "./tooltips";
+import { toggleDescendantsVisibilityOnClick } from "./graph";
 
 export const drawGraph = async (divId: string, data: any) => {
 	// Append a div to the parent div, which will host the
@@ -22,25 +23,6 @@ export const drawGraph = async (divId: string, data: any) => {
 		layout: data["layout"],
 	});
 
-	cy.on("click", "node", (event) => {
-		var node: cytoscape.NodeSingular = event.target;
-		console.log("Clicked " + node.data("id"));
-
-		var suppliers = cy.$(".supplier");
-		suppliers.forEach((node) => {
-			if (node.hidden()) {
-				node.css({ visibility: "visible" });
-				node.connectedEdges().forEach((edge) => {
-					edge.css({ visibility: "visible" });
-				});
-			} else {
-				node.css({ visibility: "hidden" });
-				node.connectedEdges().forEach((edge) => {
-					edge.css({ visibility: "hidden" });
-				});
-			}
-		});
-	});
-
 	registerTooltips(cy);
+	toggleDescendantsVisibilityOnClick(cy, ["maker"]);
 };
