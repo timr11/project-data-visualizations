@@ -13,14 +13,14 @@ curr_module_dir = path.dirname(path.abspath(__file__))
 js_dir = path.abspath(path.join(curr_module_dir, "..", "bin"))
 js_path = path.join(js_dir, "project-data-visualizations.js")
 json_dir = path.abspath(path.join(curr_module_dir, "../src/py"))
-elements_json_path = path.join(json_dir, "elements.json")
+input_data_path = path.join(json_dir, "input-data.json")
 style_json_path = path.join(json_dir, "style.json")
 layout_json_path = path.join(json_dir, "layout.json")
 style_css_path = path.join(json_dir, "style.css")
 
 files_to_monitor = [
     js_path,
-    elements_json_path,
+    input_data_path,
     style_json_path,
     layout_json_path,
     style_css_path,
@@ -38,8 +38,8 @@ class FileChangeHandler(FileSystemEventHandler):
             buildHTML()  # Replace this with the function that executes your Python script
 
 def createDataDict(json_dir: str) -> dict[str, Any]:
-    with open(os.path.join(json_dir, "elements.json")) as cy_elements_file:
-        cy_elements_json = json.load(cy_elements_file)
+    with open(os.path.join(json_dir, "input-data.json")) as input_data_file:
+        input_data_json = json.load(input_data_file)
 
     with open(os.path.join(json_dir, "style.json")) as cy_style_file:
         cy_style_json = json.load(cy_style_file)
@@ -48,7 +48,7 @@ def createDataDict(json_dir: str) -> dict[str, Any]:
         cy_layout_json = json.load(cy_layout_file)
 
     return {
-        "elements": cy_elements_json,
+        "inputData": input_data_json,
         "style": cy_style_json,
         "layout": cy_layout_json,
     }

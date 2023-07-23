@@ -1,23 +1,5 @@
 [
 	{
-		"selector": ".maker",
-		"style": {
-			"shape": "rectangle",
-			"background-image": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Factory_icon.svg",
-			"background-fit": "cover",
-			"background-opacity": 0
-		}
-	},
-	{
-		"selector": ".supplier",
-		"style": {
-			"shape": "rectangle",
-			"background-image": "https://static.thenounproject.com/png/1561391-200.png",
-			"background-fit": "cover",
-			"background-opacity": 0
-		}
-	},
-	{
 		"selector": "edge",
 		"style": {
 			"width": 3,

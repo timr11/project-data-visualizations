@@ -1,0 +1,104 @@
+[
+	{
+		"id": "QH103",
+		"root": false,
+		"class": "atom",
+		"label": "fabric"
+	},
+	{
+		"id": "QH104",
+		"root": false,
+		"class": "atom",
+		"label": "wood"
+	},
+	{
+		"id": "QH105",
+		"root": false,
+		"class": "atom",
+		"label": "stuffing"
+	},
+	{
+		"id": "QH106",
+		"root": false,
+		"class": "atom",
+		"label": "upholstery"
+	},
+	{
+		"id": "QH107",
+		"root": false,
+		"class": "atom",
+		"label": "frame"
+	},
+	{
+		"id": "QH108",
+		"root": false,
+		"class": "atom",
+		"label": "nails"
+	},
+	{
+		"id": "Q15026",
+		"root": true,
+		"class": "atom",
+		"label": "chair"
+	},
+	{
+		"id": "QH100",
+		"root": false,
+		"class": "atom",
+		"label": "chair leg"
+	},
+	{
+		"id": "QH101",
+		"root": false,
+		"class": "atom",
+		"label": "chair seat"
+	},
+	{
+		"id": "QH102",
+		"root": false,
+		"class": "atom",
+		"label": "chair back"
+	},
+	{
+		"class": "maker",
+		"label": "Devhawk Engineering",
+		"designs": [
+			{
+				"name": "Funky Chair Design",
+				"product": "Q15026",
+				"bom": ["QH100", "QH101", "QH102", "QH108"]
+			},
+			{
+				"name": "Seat Design 1",
+				"product": "QH101",
+				"bom": ["QH103"]
+			},
+			{
+				"name": "Leg Design",
+				"product": "QH100",
+				"bom": ["QH104"]
+			}
+		]
+	},
+	{
+		"class": "maker",
+		"label": "James Maker Space",
+		"designs": [
+			{
+				"name": "Seat Design 2",
+				"product": "QH101",
+				"bom": ["QH105", "QH106", "QH107"]
+			}
+		]
+	},
+	{
+		"class": "supplier",
+		"label": "raw supplies",
+		"supplies": ["QH103", "QH104", "QH106", "QH107", "QH108"]
+	},
+	{
+		"class": "supplier",
+		"label": "Robert's Chair Parts",
+		"supplies": ["QH102", "QH100"]
+	}
+]
