@@ -1,4 +1,5 @@
-import { createElements } from "../elements";
+import cytoscape from "cytoscape";
+import { createElements, assignWeights } from "../elements";
 import inputData from "./input-data.json";
 import expectedElements from "./elements.json";
 
@@ -58,5 +59,39 @@ describe("createElements", () => {
 		expect(edges.some((e) => edgeMatches(e, "supplier-0", "QH108"))).toBe(true);
 		expect(edges.some((e) => edgeMatches(e, "supplier-1", "QH102"))).toBe(true);
 		expect(edges.some((e) => edgeMatches(e, "supplier-1", "QH100"))).toBe(true);
+	});
+});
+
+describe("assignWeights", () => {
+	let cy: cytoscape.Core;
+	beforeEach(() => {
+		cy = cytoscape({
+			elements: createElements(inputData),
+		});
+	});
+
+	it("gives root nodes a weight of 0", () => {
+		assignWeights(cy);
+		const rootNode = cy.$("node[?root]")[0] as cytoscape.NodeSingular;
+		expect(rootNode.data("weight")).toBe(0);
+	});
+
+	it("gives makers of root nodes a weight of 1", () => {
+		assignWeights(cy);
+		const rootNodeMaker = cy.$(
+			"node[label = 'Devhawk Engineering']"
+		)[0] as cytoscape.NodeSingular;
+		expect(rootNodeMaker.data("weight")).toBe(1);
+	});
+
+	it("assigns weights recursively", () => {
+		assignWeights(cy);
+		const rootNodeMaker = cy.$(
+			"node[label = 'Devhawk Engineering']"
+		)[0] as cytoscape.NodeSingular;
+		console.log(
+			cy.nodes().map((node) => `${node.data("label")}: ${node.data("weight")}`)
+		);
+		expect(rootNodeMaker.data("weight")).toBe(1);
 	});
 });

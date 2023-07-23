@@ -35,6 +35,7 @@ const createAtomElement = (atom: Atom): cytoscape.NodeDefinition => {
 	return {
 		data: {
 			id: atom.id,
+			root: atom.root,
 			class: atom.class,
 			label: atom.label,
 		},
@@ -150,4 +151,36 @@ export const createElements = (
 		nodes: nodes,
 		edges: edges,
 	};
+};
+
+const assignWeightsRecursively = (n: cytoscape.NodeSingular, level: number) => {
+	n.data("weight", level);
+	const nc = n.data("class");
+	switch (nc) {
+		case "atom":
+			const atomMakers = n.incomers("node");
+			for (let atomMaker of atomMakers) {
+				if (atomMaker.data("weight") === undefined) {
+					assignWeightsRecursively(atomMaker, level + 1);
+				}
+			}
+			break;
+		case "maker":
+			const makerAtomBOMs = n.incomers("node");
+			for (let atom of makerAtomBOMs) {
+				if (atom.data("weight") === undefined) {
+					assignWeightsRecursively(atom, level + 1);
+				}
+			}
+			break;
+		case "supplier":
+			break;
+	}
+};
+
+export const assignWeights = (cy: cytoscape.Core) => {
+	const roots = cy.$("node[?root]");
+	for (let root of roots) {
+		assignWeightsRecursively(root, 0);
+	}
 };
