@@ -15,14 +15,14 @@ module.exports = {
 		library: "projectdatavisualizations",
 	},
 	resolve: {
-		extensions: [".tsx", ".ts", ".js", ".png"], // Add TypeScript and JavaScript as resolvable extensions
+		extensions: [".ts", ".js"], // Add TypeScript and JavaScript as resolvable extensions
 	},
 	module: {
 		rules: [
 			{
 				test: /\.ts$/, // Apply the following rules to TypeScript files
 				use: "ts-loader", // Use ts-loader for transpiling TypeScript
-				exclude: /node_modules/, // Exclude node_modules directory from processing
+				exclude: /(node_modules|\.spec\.ts)/, // Exclude node_modules and test files from processing
 			},
 		],
 	},
