@@ -1,5 +1,6 @@
 body {
 	font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
+	color: #fff;
 	font-size: 14px;
 }
 
@@ -9,9 +10,70 @@ body {
 	top: 0;
 	bottom: 0;
 	right: 0;
-	background-color: white;
-	z-index: 999;
 	background-color: black;
+	z-index: 999;
+}
+
+.data-panel {
+	font-size: 1.15rem;
+	position: fixed;
+	border: 2px solid #333;
+	border-radius: 3px;
+	background: rgba(0, 0, 0, 0.75);
+	top: 1rem;
+	right: 1rem;
+	z-index: 40000;
+	display: flex;
+	flex-direction: column;
+}
+
+.data-panel > span:first-child {
+	margin-top: 0rem;
+}
+
+.data-panel > span {
+	margin-top: 0.9rem;
+	padding: 0.33rem 0.75rem;
+	background: #333;
+}
+
+.data-panel > div {
+	padding: 0.5rem;
+}
+
+table {
+	display: table;
+	border-collapse: separate;
+	box-sizing: border-box;
+	text-indent: initial;
+	border-spacing: 2px;
+	border-color: gray;
+}
+
+tr {
+	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit;
+}
+
+table > tr {
+	vertical-align: middle;
+}
+
+td {
+	display: table-cell;
+	vertical-align: inherit;
+}
+
+.limited {
+	display: block;
+	max-width: min(60ch, 40vw);
+	overflow-wrap: break-word;
+}
+
+.atab td:first-child {
+	color: #aaa;
+	padding-right: 1.5rem;
 }
 
 /* makes sticky faster; disable if you want animated tippies */
@@ -21,82 +83,6 @@ body {
 
 .fullscreen {
 	width: 100%;
-	height: 400px;
+	height: 500px;
 	background-color: black;
-}
-
-/* CSS for the container div */
-.maker {
-	width: min-content; /* Smallest possible width to contain the files fully */
-	min-height: 150px; /* Minimum height to keep some space even with no files */
-	border: 10px solid transparent; /* Transparent border */
-	padding: 10px;
-	font-family: "Jost", sans-serif;
-	background-color: rgb(
-		245,
-		0,
-		245
-	); /* Background color as RGB (245, 245, 245) */
-	position: relative; /* Add relative positioning for containing the section */
-	display: flex;
-	flex-direction: column;
-}
-
-/* CSS for the title (h1) */
-.rectangle h1 {
-	margin: 0; /* Remove default margin */
-	padding: 0; /* Remove default padding */
-	font-size: 18px;
-	margin-bottom: 10px; /* Add spacing under the title */
-}
-
-/* CSS for the body text */
-.rectangle p {
-	margin: 0; /* Remove default margin */
-	padding: 0; /* Remove default padding */
-	font-size: 16px;
-	margin-bottom: 10px; /* Add 10px spacing below the body text */
-}
-
-/* CSS for the section under the body */
-.rectangle .section {
-	flex: 1;
-	background-color: white; /* White background for the section */
-	border: 10px solid transparent; /* Transparent border for the folder-like appearance */
-	box-sizing: border-box; /* Include border in the width and height calculations */
-	padding: 10px; /* Add padding inside the section */
-	display: grid;
-	grid-template-columns: repeat(
-		4,
-		minmax(60px, 1fr)
-	); /* Adjusted width for the files with a maximum of four files per row */
-	gap: 10px; /* Add 10px spacing between the files */
-	justify-content: center; /* Center the files horizontally */
-}
-
-/* CSS for the file divs */
-.rectangle .file {
-	width: 60px;
-	height: 80px; /* Adjusted height for the files */
-	background-color: rgb(245, 237, 56); /* Yellow background for the files */
-	border: 2px solid black; /* 2px black border for the files */
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-/* CSS for the white space and text at the bottom */
-.rectangle .file .file-text {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	height: 15px;
-	background-color: white;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: 10px;
-	color: black;
 }

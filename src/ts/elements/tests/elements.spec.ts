@@ -1,7 +1,8 @@
 import cytoscape from "cytoscape";
-import { createElements, assignWeights } from "../elements";
+import { createElements, InputData, elementsEqual } from "../elements";
 import inputData from "./input-data.json";
 import expectedElements from "./elements.json";
+import { Md5 } from "ts-md5";
 
 describe("createElements", () => {
 	it("creates atom, maker and supplier nodes correctly", () => {
@@ -60,38 +61,111 @@ describe("createElements", () => {
 		expect(edges.some((e) => edgeMatches(e, "supplier-1", "QH102"))).toBe(true);
 		expect(edges.some((e) => edgeMatches(e, "supplier-1", "QH100"))).toBe(true);
 	});
-});
 
-describe("assignWeights", () => {
-	let cy: cytoscape.Core;
-	beforeEach(() => {
-		cy = cytoscape({
-			elements: createElements(inputData),
-		});
-	});
-
-	it("gives root nodes a weight of 0", () => {
-		assignWeights(cy);
-		const rootNode = cy.$("node[?root]")[0] as cytoscape.NodeSingular;
-		expect(rootNode.data("weight")).toBe(0);
-	});
-
-	it("gives makers of root nodes a weight of 1", () => {
-		assignWeights(cy);
-		const rootNodeMaker = cy.$(
-			"node[label = 'Devhawk Engineering']"
-		)[0] as cytoscape.NodeSingular;
-		expect(rootNodeMaker.data("weight")).toBe(1);
-	});
-
-	it("assigns weights recursively", () => {
-		assignWeights(cy);
-		const rootNodeMaker = cy.$(
-			"node[label = 'Devhawk Engineering']"
-		)[0] as cytoscape.NodeSingular;
-		console.log(
-			cy.nodes().map((node) => `${node.data("label")}: ${node.data("weight")}`)
+	it("a -> m -> b -> m -> c", () => {
+		const inputData: InputData = [];
+		const atomIds = ["c", "b", "a"];
+		atomIds.forEach((id: string, i: number) =>
+			inputData.push({ id: id, root: i === 0, class: "atom", label: id })
 		);
-		expect(rootNodeMaker.data("weight")).toBe(1);
+		inputData.push({
+			class: "maker",
+			label: "m",
+			designs: [
+				{
+					name: "c designs",
+					product: "c",
+					bom: ["b"],
+				},
+				{
+					name: "c designs",
+					product: "b",
+					bom: ["a"],
+				},
+			],
+		});
+		const expectedNodes: cytoscape.NodeDefinition[] = [
+			{
+				data: {
+					id: "c",
+					root: true,
+					class: "atom",
+					label: "c",
+				},
+			},
+			{
+				data: {
+					id: "b",
+					root: false,
+					class: "atom",
+					label: "b",
+				},
+			},
+			{
+				data: {
+					id: "a",
+					root: false,
+					class: "atom",
+					label: "a",
+					missing: true,
+				},
+			},
+		];
+		expectedNodes.push(
+			{
+				data: {
+					id: "maker-m-c",
+					class: "maker",
+					label: "m | c",
+					product: "c",
+					bom: ["b"],
+				},
+			},
+			{
+				data: {
+					id: "maker-m-b",
+					class: "maker",
+					label: "m | b",
+					product: "b",
+					bom: ["a"],
+				},
+			}
+		);
+		const expectedEdges: cytoscape.EdgeDefinition[] = [
+			{
+				data: {
+					id: "edge-c-maker-m-c",
+					source: "c",
+					target: "maker-m-c",
+				},
+			},
+			{
+				data: {
+					id: "edge-maker-m-c-b",
+					source: "maker-m-c",
+					target: "b",
+				},
+			},
+			{
+				data: {
+					id: "edge-b-maker-m-b",
+					source: "b",
+					target: "maker-m-b",
+				},
+			},
+			{
+				data: {
+					id: "edge-maker-m-b-a",
+					source: "maker-m-b",
+					target: "a",
+				},
+			},
+		];
+		const expectedElements: cytoscape.ElementsDefinition = {
+			nodes: expectedNodes,
+			edges: expectedEdges,
+		};
+		const elements = createElements(inputData);
+		expect(elementsEqual(elements, expectedElements)).toBe(true);
 	});
 });

@@ -1,11 +1,17 @@
 import cytoscape from "cytoscape";
 import { registerTooltips } from "./tooltips";
-import { toggleDescendantsVisibilityOnClick } from "./graph";
-import { styleItUp } from "./style";
-import { assignWeights, createElements } from "./elements/elements";
+import {
+	toggleDescendantsVisibilityOnClick,
+	registerMakerClickHandler,
+} from "./graph";
+import { createElements } from "./elements/elements";
 
-import dagre, { DagreLayoutOptions } from "cytoscape-dagre";
+import dagre from "cytoscape-dagre";
 cytoscape.use(dagre);
+
+// let klay = require("cytoscape-klay");
+
+// cytoscape.use(klay); // register extension
 
 export const drawGraph = async (divId: string, data: any) => {
 	// Append a div to the parent div, which will host the
@@ -27,17 +33,90 @@ export const drawGraph = async (divId: string, data: any) => {
 	var cy = cytoscape({
 		container: document.getElementById("cy"),
 		elements: elements,
+		style: [
+			{
+				selector: "node",
+				style: {},
+			},
+			{
+				selector: "node[class='atom']",
+				style: {
+					"background-color": "yellow",
+					label: "data(label)", // Render the 'label' property as the node's label
+					"text-wrap": "wrap", // Wrap the label text within the node
+					width: "100px", // Set the node width to the width of its label text
+					height: "60px", // Set the node height to the height of its label text
+					"text-max-width": "100px", // Adjust the maximum width of the text to fit inside the node
+					"text-valign": "center", // Vertically center the text within the node
+					"text-halign": "center", // Horizontally center the text within the node
+					"border-width": "1px", // Customize the border width of the node
+					"border-color": "black", // Customize the border color of the node
+				},
+			},
+			{
+				selector: "node[class='maker'], node[class='supplier']",
+				style: {
+					shape: "rectangle",
+					width: "60px",
+					height: "60px",
+					"background-fit": "cover",
+					"background-opacity": 0,
+				},
+			},
+			{
+				selector: "node[class='maker']",
+				style: {
+					"background-image":
+						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/public/assets/Maker.png",
+				},
+			},
+			{
+				selector: "node[class='supplier']",
+				style: {
+					"background-image":
+						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/public/assets/Supplier.png",
+				},
+			},
+			// {
+			// 	selector: "node[class='atom'][^missing]",
+			// 	style: {
+			// 		"background-color": "lightyellow",
+			// 	},
+			// },
+			{
+				selector: "node[class='atom'][missing]",
+				style: {
+					"background-color": "lightpink",
+				},
+			},
+			{
+				selector: "node[class='atom'][?root]",
+				style: {
+					"background-color": "green",
+				},
+			},
+			{
+				selector: ".highlighted",
+				style: {
+					"border-color": "lightgreen",
+					"border-width": 5,
+					"border-style": "solid",
+					"border-opacity": 1,
+				},
+			},
+			{
+				selector: "edge",
+				style: {
+					"curve-style": "bezier",
+					"target-arrow-shape": "triangle",
+				},
+			},
+		],
+		layout: {
+			name: "dagre",
+		},
 	});
 
-	assignWeights(cy);
-	cy.layout({
-		name: "dagre",
-		sort: (a, b) => {
-			return a.data.weight - b.data.weight;
-		},
-	} as DagreLayoutOptions);
-
-	styleItUp(cy);
-	registerTooltips(cy);
 	toggleDescendantsVisibilityOnClick(cy, ["maker"]);
+	registerMakerClickHandler(cy);
 };

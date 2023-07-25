@@ -1,4 +1,5 @@
 import cytoscape from "cytoscape";
+import { createMakerDataPanel } from "./html-utils";
 
 const toggleVisibility = (n: cytoscape.NodeSingular) => {
 	console.log(`Toggling the visibility of node ${n.id()}`);
@@ -32,6 +33,40 @@ export const toggleDescendantsVisibilityOnClick = (
 				const children = node.successors("node");
 				children.forEach(toggleVisibility);
 			});
+		});
+	});
+};
+
+const makerClickHandler = (
+	cy: cytoscape.Core,
+	maker: cytoscape.NodeSingular
+) => {
+	const subGraph = maker.successors();
+
+	let dataPanel = document.getElementById("data-panel");
+	if (!dataPanel) {
+		subGraph.forEach((ele) => {
+			ele.classes("highlighted");
+		});
+		maker.classes("highlighted");
+		document.body.appendChild(createMakerDataPanel(maker));
+	} else {
+		subGraph.forEach((ele) => {
+			ele.classes("");
+			console.log(`setting ${ele.id()} classes to ${ele.classes()}`);
+		});
+		maker.classes("");
+		dataPanel.parentElement?.removeChild(dataPanel);
+	}
+	// const highlightedNodes = cy.$(`node`)
+	// console.log()
+};
+
+export const registerMakerClickHandler = (cy: cytoscape.Core): void => {
+	const makers = cy.$("node[class='maker']");
+	makers.forEach((maker) => {
+		maker.on("click", () => {
+			makerClickHandler(cy, maker);
 		});
 	});
 };

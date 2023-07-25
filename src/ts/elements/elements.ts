@@ -1,21 +1,22 @@
 import cytoscape from "cytoscape";
+import { Md5 } from "ts-md5";
 
 type AtomId = string;
 
-type Atom = {
+export type Atom = {
 	id: AtomId;
 	root: boolean;
 	class: string;
 	label: string;
 };
 
-type Design = {
+export type Design = {
 	name: string;
 	product: AtomId;
 	bom: AtomId[];
 };
 
-type Maker = {
+export type Maker = {
 	class: string;
 	label: string;
 	designs: Design[];
@@ -31,7 +32,28 @@ type InputObject = Atom | Maker | Supplier;
 
 export type InputData = InputObject[];
 
-const createAtomElement = (atom: Atom): cytoscape.NodeDefinition => {
+const hash = (o: object): string => Md5.hashStr(JSON.stringify(o));
+
+export const elementsEqual = (
+	g1: cytoscape.ElementsDefinition,
+	g2: cytoscape.ElementsDefinition
+): boolean => {
+	const g2NodesHashSet = new Set(g2.nodes.map((n) => hash(n)));
+	const g2EdgesHashSet = new Set(g2.edges.map((e) => hash(e)));
+	for (const node of g1.nodes) {
+		if (!g2NodesHashSet.has(hash(node))) {
+			return false;
+		}
+	}
+	for (const edge of g1.edges) {
+		if (!g2EdgesHashSet.has(hash(edge))) {
+			return false;
+		}
+	}
+	return true;
+};
+
+const createAtomNode = (atom: Atom): cytoscape.NodeDefinition => {
 	return {
 		data: {
 			id: atom.id,
@@ -42,27 +64,26 @@ const createAtomElement = (atom: Atom): cytoscape.NodeDefinition => {
 	};
 };
 
-const createMakerElement = (
+const createMakerNode = (
 	maker: Maker,
-	makerId: string
+	product: Atom
 ): cytoscape.NodeDefinition => {
+	const design = maker.designs.find((d) => d.product == product.id)!;
 	return {
 		data: {
-			id: makerId,
+			id: `maker-${maker.label}-${product.label}`,
 			class: maker.class,
-			label: maker.label,
-			designs: maker.designs,
+			label: `${maker.label} | ${product.label}`,
+			product: product.id,
+			bom: design.bom,
 		},
 	};
 };
 
-const createSupplierElement = (
-	supplier: Supplier,
-	supplierId: string
-): cytoscape.NodeDefinition => {
+const createSupplierNode = (supplier: Supplier): cytoscape.NodeDefinition => {
 	return {
 		data: {
-			id: supplierId,
+			id: `supplier-${supplier.label}`,
 			class: supplier.class,
 			label: supplier.label,
 		},
@@ -82,105 +103,131 @@ export const createElements = (
 		(e: InputObject) => e.class === "supplier"
 	) as Supplier[];
 
-	const nodes = [
-		...atoms.map((atom) => createAtomElement(atom)),
-		...makers.map((maker, i) => createMakerElement(maker, `maker-${i}`)),
-		...suppliers.map((supplier, i) =>
-			createSupplierElement(supplier, `supplier-${i}`)
-		),
-	];
-
 	const atomsMap = atoms.reduce((map, atom) => {
 		map.set(atom.id, atom);
 		return map;
 	}, new Map<AtomId, Atom>());
-	const rootAtoms = atoms.filter((atom) => atom.root);
+	const makersMap = makers.reduce((map, maker) => {
+		for (let design of maker.designs) {
+			const product = design.product;
+			const makersOfProduct = map.get(product) || [];
+			map.set(product, makersOfProduct.concat(maker));
+		}
+		return map;
+	}, new Map<AtomId, Maker[]>());
+	const suppliersMap = suppliers.reduce((map, supplier) => {
+		for (let atom of supplier.supplies) {
+			const suppliersOfAtom = map.get(atom) || [];
+			map.set(atom, suppliersOfAtom.concat(supplier));
+		}
+		return map;
+	}, new Map<AtomId, Supplier[]>());
 
-	const makerToProductEdges: cytoscape.EdgeDefinition[] = [];
-	const bomToMakerEdges: cytoscape.EdgeDefinition[] = [];
-	var edgeIdCtr = 0;
-	makers.forEach((maker, i) => {
-		const makerId = `maker-${i}`;
-		maker.designs.forEach((design) => {
-			// Add an edge from the maker to the product it creates
-			const edgeId = `edge-${edgeIdCtr++}`;
-			makerToProductEdges.push({
-				data: {
-					id: edgeId,
-					source: makerId,
-					target: design.product,
-				},
-			});
+	const concatGraphs = (
+		g1: cytoscape.ElementsDefinition,
+		g2: cytoscape.ElementsDefinition
+	): cytoscape.ElementsDefinition => {
+		return {
+			nodes: g1.nodes.concat(g2.nodes),
+			edges: g1.edges.concat(g2.edges),
+		};
+	};
 
-			// Add an edge from all required BOMs to the maker
-			for (let atomId of design.bom) {
-				const edgeId = `edge-${edgeIdCtr++}`;
-				bomToMakerEdges.push({
+	const getSupplierSubgraph = (atom: Atom): cytoscape.ElementsDefinition => {
+		const atomSuppliers = suppliersMap.get(atom.id);
+		let subGraph: cytoscape.ElementsDefinition = {
+			nodes: [],
+			edges: [],
+		};
+		if (atomSuppliers) {
+			atomSuppliers.forEach((supplier) => {
+				const supplierNode = createSupplierNode(supplier);
+				subGraph.nodes.push(supplierNode);
+				subGraph.edges.push({
 					data: {
-						id: edgeId,
-						source: atomId,
-						target: makerId,
+						id: `edge-${atom.id}-${supplierNode.data.id}`,
+						source: atom.id,
+						target: supplierNode.data.id!,
 					},
 				});
-			}
-		});
-	});
+			});
+		}
+		return subGraph;
+	};
 
-	const supplierToSuppliesEdges: cytoscape.EdgeDefinition[] = [];
-	suppliers.forEach((supplier, i) => {
-		const supplierId = `supplier-${i}`;
-		supplier.supplies.forEach((supply) => {
-			const edgeId = `edge-${edgeIdCtr++}`;
-			supplierToSuppliesEdges.push({
+	const isGraphEmpty = (g: cytoscape.ElementsDefinition): boolean => {
+		return g.nodes.length === 0 && g.edges.length === 0;
+	};
+
+	const traverseGraph = (atom: Atom): cytoscape.ElementsDefinition => {
+		let graph: cytoscape.ElementsDefinition = {
+			nodes: [],
+			edges: [],
+		};
+
+		let atomNode = createAtomNode(atom);
+		graph.nodes.push(atomNode);
+
+		// Add suppliers to the graph
+		const supplierSubgraph = getSupplierSubgraph(atom);
+		graph = concatGraphs(graph, supplierSubgraph);
+
+		const makersOfAtom = makersMap.get(atom.id);
+		if (makersOfAtom === undefined) {
+			if (isGraphEmpty(supplierSubgraph)) {
+				atomNode.data.missing = true;
+				return { nodes: [atomNode], edges: [] };
+			}
+			// If there are no makers, return the supplier subgraph
+			return graph;
+		}
+
+		// Get the sub-graphs of each maker of the atom
+		for (const maker of makersOfAtom) {
+			// First append the maker node
+
+			const makerNode = createMakerNode(maker, atom);
+			graph.nodes.push(makerNode);
+			graph.edges.push({
 				data: {
-					id: edgeId,
-					source: supplierId,
-					target: supply,
+					id: `edge-${atom.id}-${makerNode.data.id}`,
+					source: atom.id,
+					target: makerNode.data.id!,
 				},
 			});
-		});
-	});
 
-	const edges = [
-		...makerToProductEdges,
-		...bomToMakerEdges,
-		...supplierToSuppliesEdges,
-	];
+			for (const atomBOMId of makerNode.data.bom as AtomId[]) {
+				const atomBOM = atomsMap.get(atomBOMId);
+				if (!atomBOM) {
+					continue;
+				}
+				graph.edges.push({
+					data: {
+						id: `edge-${makerNode.data.id}-${atomBOMId}`,
+						source: makerNode.data.id!,
+						target: atomBOMId,
+					},
+				});
 
-	return {
-		nodes: nodes,
-		edges: edges,
+				const atomBOMGraph = traverseGraph(atomBOM);
+				graph.nodes.push(...atomBOMGraph.nodes);
+				graph.edges.push(...atomBOMGraph.edges);
+			}
+		}
+		return graph;
 	};
-};
 
-const assignWeightsRecursively = (n: cytoscape.NodeSingular, level: number) => {
-	n.data("weight", level);
-	const nc = n.data("class");
-	switch (nc) {
-		case "atom":
-			const atomMakers = n.incomers("node");
-			for (let atomMaker of atomMakers) {
-				if (atomMaker.data("weight") === undefined) {
-					assignWeightsRecursively(atomMaker, level + 1);
-				}
-			}
-			break;
-		case "maker":
-			const makerAtomBOMs = n.incomers("node");
-			for (let atom of makerAtomBOMs) {
-				if (atom.data("weight") === undefined) {
-					assignWeightsRecursively(atom, level + 1);
-				}
-			}
-			break;
-		case "supplier":
-			break;
-	}
-};
+	const rootAtoms = atoms.filter((atom) => atom.root);
+	const elements = rootAtoms.reduce(
+		(graph, rootAtom) => {
+			const newGraph = traverseGraph(rootAtom);
+			return concatGraphs(graph, newGraph);
+		},
+		{
+			nodes: [],
+			edges: [],
+		} as cytoscape.ElementsDefinition
+	);
 
-export const assignWeights = (cy: cytoscape.Core) => {
-	const roots = cy.$("node[?root]");
-	for (let root of roots) {
-		assignWeightsRecursively(root, 0);
-	}
+	return elements;
 };
