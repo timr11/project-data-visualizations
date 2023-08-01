@@ -618,6 +618,13 @@
   dependencies:
     "@types/cytoscape" "*"
 
+"@types/cytoscape-klay@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@types/cytoscape-klay/-/cytoscape-klay-3.1.1.tgz#7491f24f73c6a2e71a61fb3646a104395f144292"
+  integrity sha512-1k/w2DVVTCpOVbmkoM6ZtkMXQBnf+dGVoEEcaPyq0sq83KuIMf2Xssecd7BJ7Kp/sZlOpuyqh/wSjQDKd4J1hw==
+  dependencies:
+    "@types/cytoscape" "*"
+
 "@types/cytoscape-popper@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/cytoscape-popper/-/cytoscape-popper-2.0.0.tgz#66c02a6d8a918b7de255228ad11c947b8b2e6dd3"

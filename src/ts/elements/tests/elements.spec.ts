@@ -1,14 +1,13 @@
 import cytoscape from "cytoscape";
-import { createElements, InputData, elementsEqual } from "../elements";
+import { createElements, InputData, elementsEqual, hash } from "../elements";
 import inputData from "./input-data.json";
 import expectedElements from "./elements.json";
-import { Md5 } from "ts-md5";
 
 describe("createElements", () => {
 	it("creates atom, maker and supplier nodes correctly", () => {
 		const expectedNodes: cytoscape.NodeDefinition[] = expectedElements.nodes;
 		const nodes = createElements(inputData).nodes;
-		expect(nodes).toEqual(expectedNodes);
+		expect(nodes.map(hash).sort()).toEqual(expectedNodes.map(hash).sort());
 	});
 
 	it("creates an edge from makers to the products they make", () => {

@@ -6,12 +6,8 @@ import {
 } from "./graph";
 import { createElements } from "./elements/elements";
 
-import dagre from "cytoscape-dagre";
-cytoscape.use(dagre);
-
-// let klay = require("cytoscape-klay");
-
-// cytoscape.use(klay); // register extension
+import klay, { KlayLayoutOptions } from "cytoscape-klay";
+cytoscape.use(klay);
 
 export const drawGraph = async (divId: string, data: any) => {
 	// Append a div to the parent div, which will host the
@@ -113,8 +109,12 @@ export const drawGraph = async (divId: string, data: any) => {
 			},
 		],
 		layout: {
-			name: "dagre",
-		},
+			name: "klay",
+			klay: {
+				direction: "UP",
+				nodePlacement: "LINEAR_SEGMENTS",
+			},
+		} as KlayLayoutOptions,
 	});
 
 	toggleDescendantsVisibilityOnClick(cy, ["maker"]);

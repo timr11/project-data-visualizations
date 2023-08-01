@@ -32,7 +32,7 @@ type InputObject = Atom | Maker | Supplier;
 
 export type InputData = InputObject[];
 
-const hash = (o: object): string => Md5.hashStr(JSON.stringify(o));
+export const hash = (o: object): string => Md5.hashStr(JSON.stringify(o));
 
 export const elementsEqual = (
 	g1: cytoscape.ElementsDefinition,
@@ -145,9 +145,9 @@ export const createElements = (
 				subGraph.nodes.push(supplierNode);
 				subGraph.edges.push({
 					data: {
-						id: `edge-${atom.id}-${supplierNode.data.id}`,
-						source: atom.id,
-						target: supplierNode.data.id!,
+						id: `edge-${supplierNode.data.id}-${atom.id}`,
+						source: supplierNode.data.id!,
+						target: atom.id,
 					},
 				});
 			});
@@ -190,9 +190,9 @@ export const createElements = (
 			graph.nodes.push(makerNode);
 			graph.edges.push({
 				data: {
-					id: `edge-${atom.id}-${makerNode.data.id}`,
-					source: atom.id,
-					target: makerNode.data.id!,
+					id: `edge-${makerNode.data.id}-${atom.id}`,
+					source: makerNode.data.id!,
+					target: atom.id,
 				},
 			});
 
@@ -204,8 +204,8 @@ export const createElements = (
 				graph.edges.push({
 					data: {
 						id: `edge-${makerNode.data.id}-${atomBOMId}`,
-						source: makerNode.data.id!,
-						target: atomBOMId,
+						source: atomBOMId,
+						target: makerNode.data.id!,
 					},
 				});
 
