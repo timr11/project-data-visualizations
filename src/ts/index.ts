@@ -37,11 +37,12 @@ export const drawGraph = async (divId: string, data: any) => {
 			{
 				selector: "node[class='atom']",
 				style: {
+					shape: "round-rectangle",
 					"background-color": "yellow",
 					label: "data(label)", // Render the 'label' property as the node's label
 					"text-wrap": "wrap", // Wrap the label text within the node
-					width: "100px", // Set the node width to the width of its label text
-					height: "60px", // Set the node height to the height of its label text
+					width: "90px", // Set the node width to the width of its label text
+					height: "40px", // Set the node height to the height of its label text
 					"text-max-width": "100px", // Adjust the maximum width of the text to fit inside the node
 					"text-valign": "center", // Vertically center the text within the node
 					"text-halign": "center", // Horizontally center the text within the node
@@ -82,7 +83,7 @@ export const drawGraph = async (divId: string, data: any) => {
 			{
 				selector: "node[class='atom'][missing]",
 				style: {
-					"background-color": "lightpink",
+					"background-color": "red",
 				},
 			},
 			{
