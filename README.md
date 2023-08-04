@@ -23,14 +23,16 @@ The python code sends JS code a dictionary containing three essential ingredient
 
 Install the [Jupyter VS Code extensions](https://code.visualstudio.com/docs/datascience/jupyter-notebooks). Also you'll need [poetry](https://python-poetry.org/docs/).
 
-To install poetry deps to run the ipynb, run:
+1. Install poetry deps:
 
 ```bash
 poetry shell
 poetry install
 ```
 
-You're now set to run the project-data-visualizations.ipynb right in VS Code.
+2. Open the [`.ipynb`](src/py/project-data-visualizations.ipynb) in VS Code. The Jupyter extension should render something similar to Google Colab.
+3. Select the python interpreter from poetry: `.venv/bin/python`. There should be an option at the top right to select the python interpreter.
+4. Run the notebook.
 
 ## Google Colab Setup
 
