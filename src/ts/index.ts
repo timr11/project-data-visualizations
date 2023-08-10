@@ -59,14 +59,14 @@ export const drawGraph = async (divId: string, data: any) => {
 				selector: "node[class='maker']",
 				style: {
 					"background-image":
-						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/public/assets/Maker.png",
+						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/Maker.png",
 				},
 			},
 			{
 				selector: "node[class='supplier']",
 				style: {
 					"background-image":
-						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/public/assets/Supplier.png",
+						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/Supplier.png",
 				},
 			},
 			{
