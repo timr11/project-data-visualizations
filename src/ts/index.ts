@@ -23,17 +23,12 @@ export const drawGraph = async (divId: string, data: any) => {
 	// but that's not working with the ipynb for some reason...
 	await new Promise((r) => setTimeout(r, 300));
 
-	console.log(data["inputData"]);
-	const elements = createElements(data["inputData"]);
+	const elements = createElements(data);
 
 	var cy = cytoscape({
 		container: document.getElementById("cy"),
 		elements: elements,
 		style: [
-			{
-				selector: "node",
-				style: {},
-			},
 			{
 				selector: "node[class='atom']",
 				style: {
@@ -74,12 +69,6 @@ export const drawGraph = async (divId: string, data: any) => {
 						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/public/assets/Supplier.png",
 				},
 			},
-			// {
-			// 	selector: "node[class='atom'][^missing]",
-			// 	style: {
-			// 		"background-color": "lightyellow",
-			// 	},
-			// },
 			{
 				selector: "node[class='atom'][missing]",
 				style: {
