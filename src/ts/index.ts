@@ -36,8 +36,8 @@ export const drawGraph = async (divId: string, data: any) => {
 			{
 				selector: "node[class='atom']",
 				style: {
-					shape: "round-rectangle",
-					"background-color": "yellow",
+					shape: "rectangle",
+					// "background-color": "yellow",
 					label: "data(label)", // Render the 'label' property as the node's label
 					"text-wrap": "wrap", // Wrap the label text within the node
 					width: "90px", // Set the node width to the width of its label text
@@ -47,6 +47,11 @@ export const drawGraph = async (divId: string, data: any) => {
 					"text-halign": "center", // Horizontally center the text within the node
 					"border-width": "1px", // Customize the border width of the node
 					"border-color": "black", // Customize the border color of the node
+
+					"background-image":
+						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/bom-black-blank.png",
+					"background-fit": "cover",
+					"background-opacity": 0,
 				},
 			},
 			{
