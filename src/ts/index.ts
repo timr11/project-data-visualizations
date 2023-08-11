@@ -24,6 +24,7 @@ export const drawGraph = async (divId: string, data: any) => {
 	await new Promise((r) => setTimeout(r, 300));
 
 	const elements = createElements(data);
+	console.log(elements);
 
 	var cy = cytoscape({
 		container: document.getElementById("cy"),
@@ -49,8 +50,6 @@ export const drawGraph = async (divId: string, data: any) => {
 				selector: "node[class='maker'], node[class='supplier']",
 				style: {
 					shape: "rectangle",
-					width: "60px",
-					height: "60px",
 					"background-fit": "cover",
 					"background-opacity": 0,
 				},
@@ -58,6 +57,8 @@ export const drawGraph = async (divId: string, data: any) => {
 			{
 				selector: "node[class='maker']",
 				style: {
+					height: "80px",
+					width: "80px",
 					"background-image":
 						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/Maker.png",
 				},
@@ -65,6 +66,8 @@ export const drawGraph = async (divId: string, data: any) => {
 			{
 				selector: "node[class='supplier']",
 				style: {
+					height: "80px",
+					width: "100px",
 					"background-image":
 						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/Supplier.png",
 				},
