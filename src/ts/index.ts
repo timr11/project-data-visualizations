@@ -63,7 +63,7 @@ export const drawGraph = async (divId: string, data: any) => {
 					height: "80px",
 					width: "80px",
 					"background-image":
-						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/Maker.png",
+						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/okw-yellow.png",
 				},
 			},
 			{
