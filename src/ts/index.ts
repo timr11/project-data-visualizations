@@ -40,14 +40,14 @@ export const drawGraph = async (divId: string, data: any) => {
 					// "background-color": "yellow",
 					label: "data(label)", // Render the 'label' property as the node's label
 					"text-wrap": "wrap", // Wrap the label text within the node
-					width: "90px", // Set the node width to the width of its label text
-					height: "40px", // Set the node height to the height of its label text
-					"text-max-width": "100px", // Adjust the maximum width of the text to fit inside the node
+					width: "644px", // Set the node width to the width of its label text
+					height: "227px", // Set the node height to the height of its label text
+					"text-max-width": "1000px", // Adjust the maximum width of the text to fit inside the node
 					"text-valign": "center", // Vertically center the text within the node
 					"text-halign": "center", // Horizontally center the text within the node
-					"border-width": "1px", // Customize the border width of the node
+					"border-width": "3px", // Customize the border width of the node
 					"border-color": "black", // Customize the border color of the node
-
+					"font-size": 90,
 					"background-image":
 						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/bom-black-blank.png",
 					"background-fit": "cover",
@@ -65,8 +65,8 @@ export const drawGraph = async (divId: string, data: any) => {
 			{
 				selector: "node[class='maker']",
 				style: {
-					height: "80px",
-					width: "80px",
+					height: "539px",
+					width: "545px",
 					"background-image":
 						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/okw-yellow.png",
 				},
@@ -74,8 +74,8 @@ export const drawGraph = async (divId: string, data: any) => {
 			{
 				selector: "node[class='supplier']",
 				style: {
-					height: "80px",
-					width: "100px",
+					height: "539px",
+					width: "671px",
 					"background-image":
 						"https://raw.githubusercontent.com/timr11/project-data-visualizations/main/static/Supplier.png",
 				},
@@ -106,6 +106,7 @@ export const drawGraph = async (divId: string, data: any) => {
 				style: {
 					"curve-style": "bezier",
 					"target-arrow-shape": "triangle",
+					width: 15,
 				},
 			},
 		],
@@ -116,9 +117,8 @@ export const drawGraph = async (divId: string, data: any) => {
 
 	cy.layout({
 		name: "dagre",
-		dagre: {
-			nodeSep: 2,
-		},
+		rankSep: 500,
+		nodeSep: 300,
 	} as DagreLayoutOptions).run();
 
 	// Flip everythin 180 degs
