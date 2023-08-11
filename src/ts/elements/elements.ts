@@ -1,27 +1,22 @@
 import cytoscape from "cytoscape";
 import { Md5 } from "ts-md5";
-import { supplier } from "../style/fulfillment-plan-nodes";
 
-// Base product type
 type Product = {
 	id: string;
 	desc: string;
 };
 
-// SuppliedTree type
 type SuppliedTree = {
 	product: Product;
 	type: "supplied";
 	party: string;
 };
 
-// MissingTree type
 type MissingTree = {
 	product: Product;
 	type: "missing";
 };
 
-// MadeTree type
 type MadeTree = {
 	product: Product;
 	type: "made";

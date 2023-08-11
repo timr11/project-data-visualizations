@@ -6,8 +6,11 @@ import {
 } from "./graph";
 import { createElements } from "./elements/elements";
 
-import klay, { KlayLayoutOptions } from "cytoscape-klay";
-cytoscape.use(klay);
+// import klay, { KlayLayoutOptions } from "cytoscape-klay";
+// cytoscape.use(klay);
+
+import dagre, { DagreLayoutOptions } from "cytoscape-dagre";
+cytoscape.use(dagre);
 
 export const drawGraph = async (divId: string, data: any) => {
 	// Append a div to the parent div, which will host the
@@ -101,15 +104,38 @@ export const drawGraph = async (divId: string, data: any) => {
 				},
 			},
 		],
-		layout: {
-			name: "klay",
-			klay: {
-				direction: "UP",
-				nodePlacement: "LINEAR_SEGMENTS",
-			},
-		} as KlayLayoutOptions,
 	});
+	const boundingBox = cy.nodes().boundingBox();
+	const centerX = (boundingBox.x1 + boundingBox.x2) / 2;
+	const centerY = (boundingBox.y1 + boundingBox.y2) / 2;
+
+	cy.layout({
+		name: "dagre",
+		dagre: {
+			nodeSep: 2,
+		},
+	} as DagreLayoutOptions).run();
+
+	// Flip everythin 180 degs
+	cy.nodes().positions(function (node) {
+		const oldX = node.position("x");
+		const oldY = node.position("y");
+		let newX =
+			centerX +
+			(oldX - centerX) * Math.cos(Math.PI) -
+			(oldY - centerY) * Math.sin(Math.PI);
+		let newY =
+			centerY +
+			(oldX - centerX) * Math.sin(Math.PI) +
+			(oldY - centerY) * Math.cos(Math.PI);
+		return {
+			x: newX,
+			y: newY,
+		};
+	});
+	cy.fit();
 
 	toggleDescendantsVisibilityOnClick(cy, ["maker"]);
 	registerMakerClickHandler(cy);
+	registerTooltips(cy);
 };

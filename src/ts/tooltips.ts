@@ -33,23 +33,12 @@ const _makeTippy = (node: cytoscape.NodeSingular, text: string) => {
 	return tip;
 };
 
-// For any in the "elements" JSON with
 export const registerTooltips = (cy: cytoscape.Core) => {
 	cy.nodes().forEach((node) => {
-		const tooltipData: { [key: string]: string } = node.data()["tooltip"] || {};
-		console.log(tooltipData);
-		var tooltipStr: string = "";
-
-		const keys = Object.keys(tooltipData);
-		const len = keys.length;
-		for (var i = 0; i < len; i++) {
-			const key = keys[i];
-			tooltipStr += key + ": " + tooltipData[key];
-			if (i !== len - 1) {
-				tooltipStr += "<br/>";
-			}
+		const nodeClass = node.data("class");
+		if (nodeClass === "maker" || nodeClass === "supplier") {
+			const tooltipStr = node.data("label");
+			_makeTippy(node, tooltipStr);
 		}
-
-		_makeTippy(node, tooltipStr);
 	});
 };
