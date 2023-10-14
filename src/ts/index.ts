@@ -4,10 +4,7 @@ import {
 	toggleDescendantsVisibilityOnClick,
 	registerMakerClickHandler,
 } from "./graph";
-import { createElements } from "./elements/elements";
-
-// import klay, { KlayLayoutOptions } from "cytoscape-klay";
-// cytoscape.use(klay);
+import { createElements } from "./elements";
 
 import dagre, { DagreLayoutOptions } from "cytoscape-dagre";
 cytoscape.use(dagre);
